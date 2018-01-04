@@ -20,7 +20,7 @@ void draw() {
   float ENVELOPE_SPREAD = 0.20;
   
   // The noise coefficient to use when generating wave values.
-  float NOISE_COEFFICIENT = 0.18;
+  float NOISE_COEFFICIENT = 0.180;
   
   // --------------------
   // --- DRAWING CODE ---
