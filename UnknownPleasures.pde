@@ -1,3 +1,7 @@
+import processing.pdf.*;
+
+boolean record;
+
 void setup() {
   // Set up graphics
   size(800, 800);
@@ -33,6 +37,13 @@ void draw() {
   // --- DRAWING CODE ---
   // --------------------
   
+  // If the record key was pressed, start recording the current draw() call into a PDF file
+  if (record) {
+    beginRecord(PDF, "unknown-pleasures-" +
+      year() + month() + day() + hour() + minute() + second() +
+      "-####.pdf");
+  }
+  
   // Set up colors
   background(backgroundColor);
   stroke(strokeColor);
@@ -61,6 +72,19 @@ void draw() {
     // Move the coordinate system origin down, so that it's ready for the next wave
     translate(0, waveSpacing);
   }
+  
+  // If we were recording into the PDF, we need to call endRecord() explicitly so the file gets generated
+  if (record) {
+    endRecord();
+    record = false;
+  }
+}
+
+void keyPressed() {
+  if (key == 'p' || key == 'P') {
+    // Record a new PDF file when the P key is pressed
+    record = true;
+  }
 }
 
 void drawWave(int row, int valueCount, float widthPixels, float heightPixels, float spread,
@@ -88,7 +112,7 @@ void drawWave(int row, int valueCount, float widthPixels, float heightPixels, fl
 }
 
 float gaussian(float x, float a, float b, float c) {
-  // We're using the normalized Gaussian distribution as the envelope for each wave.
+  // We're using the normalized Gaussian function as the envelope for each wave.
   // Read more about the function here: https://en.wikipedia.org/wiki/Gaussian_function
   float e = 2.7182818285;
   float exponent = -0.5 * pow((x - b) / c, 2);
